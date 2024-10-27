@@ -28,6 +28,7 @@ public class StudentService implements IStudentService {
     @Autowired
     private WalletRepository walletRepository;
 
+    // Acho que os metodos register e register with teacher poderiam ser unificaods para evitar repetição de código
     @Override
     public Student register(StudentDTO studentDTO) {
         int defaultCoins = 0;
@@ -37,11 +38,11 @@ public class StudentService implements IStudentService {
         wallet.setCoins(defaultCoins);
         wallet.setDescription(defaultDescription);
 
-        walletRepository.save(wallet);
+        walletRepository.save(wallet); // Adicionar verificação para dar garantia de que a wallet foi salva
 
         Student student = UsersMapper.StudentDtoToModel(studentDTO);
         student.setWallet(wallet);
-        studentRepository.save(student);
+        studentRepository.save(student); // Adicionar verificação para dar garantia de que o student foi salvo
         return student;
     }
 
@@ -56,20 +57,20 @@ public class StudentService implements IStudentService {
         wallet.setCoins(defaultCoins);
         wallet.setDescription(defaultDescription);
 
-        walletRepository.save(wallet);
+        walletRepository.save(wallet); // Adicionar verificação para dar garantia de que a wallet foi salva
 
         Teacher teacher = teacherService.getTeacherById(studentDTO.id_teacher());
         student.setTeacher(teacher);
         student.setWallet(wallet);
 
-        studentRepository.save(student);
+        studentRepository.save(student); // Adicionar verificação aqui também, ou um @transactional na classe
 
         return student;
     }
 
     @Override
     public List<Student> getAllStudent() {
-        return studentRepository.findAll();
+        return studentRepository.findAll(); // Se a lista ficar muito grande pode ser interessante usar paginação e ordenação
     }
 
     @Override
@@ -86,7 +87,7 @@ public class StudentService implements IStudentService {
             Student existingStudent = optional.get();
             existingStudent.setAddress(studentDTO.address());
             existingStudent.setPhoneNumber(studentDTO.phone_number());
-            existingStudent.setPassword(studentDTO.password());
+            existingStudent.setPassword(studentDTO.password()); // Adicionar verificação para garantir que a senha foi criptografada
 
             studentRepository.save(existingStudent);
             return existingStudent;
@@ -99,7 +100,7 @@ public class StudentService implements IStudentService {
     public boolean delete(Long id) {
         Optional<Student> optional = studentRepository.findById(id);
         if (optional.isPresent()) {
-            studentRepository.delete(optional.get());
+            studentRepository.delete(optional.get()); // Tem várias classes que dependem de student, então é necessário verificar se é possível deletar elas também
             return true;
         }
 

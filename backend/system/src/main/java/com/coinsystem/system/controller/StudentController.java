@@ -28,6 +28,9 @@ public class StudentController {
     @Autowired
     private IStudentService studentService;
 
+    // Acho que os metodos register e register with teacher poderiam ser unificaods para evitar repetição de código
+    // Considero essa uma refatoração relativamente fácil, só adicionar a verificação na camada de serviço
+    // O codigo aqui na camada de controller está práticamente igual
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Student>> register(@RequestBody @Valid StudentDTO studentDTO) {
         try {
@@ -40,6 +43,7 @@ public class StudentController {
         }
     }
 
+    // Acho que não é uma boa prática utilizar camelCase para o nome do endpoint
     @PostMapping("/registerWithTeacher")
     public ResponseEntity<ApiResponse<Student>> registerWithTeacher(@RequestBody @Valid StudentDTO studentDTO) {
         try {
@@ -53,6 +57,7 @@ public class StudentController {
         }
     }
 
+    // Nomenclatura: getAllStudents -> plural já que é uma lista    
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<Student>>> getAllStudent() {
         try {
@@ -82,6 +87,7 @@ public class StudentController {
         }
     }
 
+    // A nomenclatura do método quebra o padrão das outras classes, sugiro renomear para updateStudent
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse<Student>> update(@PathVariable Long id,
             @RequestBody @Valid StudentDTO studentDTO) {
@@ -100,6 +106,7 @@ public class StudentController {
         }
     }
 
+    // Nomenclatura para deleteStudent
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         try {

@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/partnercompany")
 public class PartnerCompanyController {
 
+    // Boa decisão arquitetural de criar a interface para a camada de serviço e injetar ela aqui
     @Autowired
     private IPartnerCompanyService partnerCompanyService;
 
@@ -45,6 +46,7 @@ public class PartnerCompanyController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<PartnerCompany>>> getAllPartnerCompany() {
         try {
+            // ACho que vale a pena colocar paginação e ordenação aqui, talvez filtrar tbm seja interessante
             List<PartnerCompany> partnerCompany = partnerCompanyService.getAllPartnerCompany();
             ApiResponse<List<PartnerCompany>> response = new ApiResponse<>(true,
                     "All PartnerCompany fetched successfully", partnerCompany);
@@ -59,6 +61,7 @@ public class PartnerCompanyController {
     public ResponseEntity<ApiResponse<PartnerCompany>> getPartnerCompanyById(@PathVariable Long id) {
         try {
             PartnerCompany partnerCompany = partnerCompanyService.getPartnerCompanyById(id);
+            // Essa verificação de null aqui me parece redundante já que a camada de serviço já lança uma exceção caso não encontre o usuário
             if (partnerCompany != null) {
                 ApiResponse<PartnerCompany> response = new ApiResponse<>(true, "PartnerCompany found successfully",
                         partnerCompany);
@@ -78,6 +81,7 @@ public class PartnerCompanyController {
             @RequestBody @Valid PartnerCompanyDTO partnerCompanyDTO) {
         try {
             PartnerCompany updatedPartnerCompany = partnerCompanyService.update(id, partnerCompanyDTO);
+            // Essa verificação de null aqui me parece redundante já que a camada de serviço já lança uma exceção caso não encontre o usuário
             if (updatedPartnerCompany != null) {
                 ApiResponse<PartnerCompany> response = new ApiResponse<>(true, "PartnerCompany updated successfully",
                         updatedPartnerCompany);

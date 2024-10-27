@@ -14,6 +14,8 @@ import com.coinsystem.system.model.Users;
 
 public class UsersMapper {
 
+    // Acho que vale a pena adicionar nesses mappers a validação dos dados já que ele é bastante usado
+    // Centralizar as validações aqui me parece uma boa prática
     public static Users UserDtoToModel(UsersDTO userDTO) {
         return new Users(userDTO.name(), userDTO.email(), UsersType.USERS,userDTO.phone_number(), userDTO.password(),userDTO.address());
     }
